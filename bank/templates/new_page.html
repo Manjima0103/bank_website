@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <style>
+        .form-container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        .form-check {
+            margin-bottom: 10px;
+        }
+
+        .button-container {
+            margin-top: 10px;
+        }
+
+        .home-link {
+            display: block;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+           .success-msg {
+            color: green;
+            margin-bottom: 10px;
+        }
+
+    </style>
+
+
+    {% if form %}
+        <h1 class="page-title">Harmony Bank</h1>
+        <div class="form-container">
+            {% for message in messages %}
+                <div class="alert alert-success" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+
+            <h1 class="page-title">Bank Application Form</h1>
+            <div class="form-container">
+                <form method="post" action="{% url 'bank_app:form_submission' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="id_name">Name:</label>
+                        {{ form.name }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_dob">DOB:</label>
+                        {{ form.dob }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_age">Age:</label>
+                        {{ form.age }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_gender">Gender:</label>
+                        {{ form.gender }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_phone">Phone Number:</label>
+                        {{ form.phone }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_email">Email:</label>
+                        {{ form.email }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_address">Address:</label>
+                        {{ form.address }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_district">District:</label>
+                        {{ form.district }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_branch">Branch:</label>
+                        {{ form.branch }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_account_type">Account Type:</label>
+                        {{ form.account_type }}
+                    </div>
+                    <div class="form-group">
+                        <label>Materials Provide:</label>
+                        {% for choice in form.materials_provide %}
+                            <div class="form-check">
+                                {{ choice }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="button-container">
+     <input type="submit" value="Submit" class="btn btn-primary">
+    <a href="{% url 'bank_app:logout' %}" class="btn btn-secondary">Logout</a>
+                     </div>
+
+                </form>
+            </div>
+        {% else %}
+            <p>Form is not available.</p>
+        {% endif %}
+    </div>
+
+
+
+    <script>
+        // Function to update the branch options based on the selected district
+        function updateBranchOptions() {
+            var districtSelect = document.getElementById("id_district");
+            var branchSelect = document.getElementById("id_branch");
+            var selectedDistrict = districtSelect.value;
+
+            // Clear existing options
+            branchSelect.innerHTML = "";
+
+            // Get the branches for the selected district from the BRANCH_CHOICES dictionary
+            var branches = JSON.parse('{{ BRANCH_CHOICES_JSON|escapejs }}')[selectedDistrict];
+
+            // Create new options for the branches
+            for (var i = 0; i < branches.length; i++) {
+                var branch = branches[i];
+                var option = document.createElement("option");
+                option.text = branch;
+                option.value = branch;
+                branchSelect.add(option);
+            }
+        }
+
+        // Attach event listener to the district select element
+        var districtSelect = document.getElementById("id_district");
+        districtSelect.addEventListener("change", updateBranchOptions);
+
+        // Update the branch options initially on page load
+        updateBranchOptions();
+    </script>
+{% endblock %}

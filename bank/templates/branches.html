@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <h1>Bank Branches</h1>
+    <ul>
+        <li><a href="{% url 'bank_app:district_wikipedia' 'Kasaragod' %}">Kasaragod</a></li>
+        <li><a href="{% url 'bank_app:district_wikipedia' 'Kannur' %}">Kannur</a></li>
+        <li><a href="{% url 'bank_app:district_wikipedia' 'Kozhikode' %}">Kozhikode</a></li>
+        <li><a href="{% url 'bank_app:district_wikipedia' 'Wayanad' %}">Wayanad</a></li>
+        <li><a href="{% url 'bank_app:district_wikipedia' 'Malappuram' %}">Malappuram</a></li>
+    </ul>
+{% endblock %}
